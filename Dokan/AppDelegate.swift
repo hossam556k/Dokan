@@ -7,7 +7,10 @@
 
 import UIKit
 import CoreData
-
+import FirebaseCore
+#if DEBUG
+import FirebaseCrashlytics
+#endif
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -15,6 +18,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        FirebaseApp.configure()
+        #if DEBUG
+        if let app = FirebaseApp.app() {
+            print("[Firebase audit] project=\(app.options.projectID ?? "unknown"), appID=\(app.options.googleAppID), bundle=\(Bundle.main.bundleIdentifier ?? "unknown")")
+        }
+        print("[Firebase audit] Crashlytics collection enabled=\(Crashlytics.crashlytics().isCrashlyticsCollectionEnabled())")
+        #endif
         return true
     }
 
